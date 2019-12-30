@@ -37,18 +37,23 @@ public:
                     space = spaceLen / (wordsCnt - 1);
                     addCnt = spaceLen % (wordsCnt - 1);
                 }
-                strcpy(tmp, words[s].c_str());
+                memset(tmp, ' ', maxWidth);
                 int idx = words[s].size();
+                memcpy(tmp, words[s].c_str(), idx);
+                // strcpy(tmp, words[s].c_str());
                 for (int i = s + 1,j = 0; i < e; ++i, ++j) {
                     int sCnt = space;
                     if (j < addCnt) sCnt++;
-                    memset(tmp + idx, ' ', sCnt);
+                    // memset(tmp + idx, ' ', sCnt);
                     idx += sCnt;
-                    strcpy(tmp + idx, words[i].c_str());
-                    idx += words[i].size();
+                    int len = words[i].size();
+                    memcpy(tmp + idx, words[i].c_str(), len);
+                    idx += len;
+                    // strcpy(tmp + idx, words[i].c_str());
+                    // idx += words[i].size();
                 }
                 if (idx < maxWidth) {
-                    memset(tmp + idx, ' ', maxWidth - idx);
+                    // memset(tmp + idx, ' ', maxWidth - idx);
                 }
                 ret.push_back(tmp);
             }
