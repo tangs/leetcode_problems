@@ -25,10 +25,9 @@ public:
                 ite = it;
                 break;
             }
-            if (s > ((*it)[1])) {
-                its = it + 1;
+            if (s > ((*it++)[1])) {
+                its = it;
             }
-            ++it;
         }
 
         if (its == end) {
