@@ -10,6 +10,7 @@ struct ListNode {
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
+        if (!head) return NULL;
         ListNode* prev = head;
         ListNode* prevGroup = NULL;
         ListNode* p = head->next;
