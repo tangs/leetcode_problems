@@ -27,7 +27,6 @@ public:
         sort(candidates.begin(), candidates.end());
         vector<vector<int>> ret;
         vector<int> nums;
-        unordered_map<int, bool> idxs;
         deal(ret, candidates, nums, target, 0);
         return ret;
     }
