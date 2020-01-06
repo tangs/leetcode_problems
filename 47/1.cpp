@@ -1,10 +1,11 @@
 #include <vector>
-#include <unordered_set>
+#include <string.h>
+// #include <unordered_set>
 
 using namespace std;
 
 class Solution {
-    void deal(vector<vector<int>>& ret, unordered_set<int>& idxs, 
+    void deal(vector<vector<int>>& ret, bool* idxs, 
       vector<int>& cur, vector<int>& nums) {
         int len = nums.size();
         if (cur.size() == len) {
@@ -12,15 +13,15 @@ class Solution {
             return;
         }
         for (int i = 0; i < len; ++i) {
-            if (idxs.find(i) != idxs.end()) continue;
+            if (idxs[i]) continue;
             int data = nums[i];
             cur.push_back(data);
-            idxs.insert(i);
+            idxs[i] = true;
 
             deal(ret, idxs, cur, nums);
 
             cur.pop_back();
-            idxs.erase(idxs.find(i));
+            idxs[i] = false;
             while(i < len - 1 && nums[i] == nums[i + 1]) ++i;
         }
     }
@@ -28,9 +29,12 @@ public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         sort(nums.begin(), nums.end());
         vector<vector<int>> ret;
-        unordered_set<int> idxs;
+        // unordered_set<int> idxs;
+        int size = nums.size();
+        bool bits[size];
+        memset(bits, 0, sizeof(bits));
         vector<int> cur;
-        deal(ret, idxs, cur, nums);
+        deal(ret, bits, cur, nums);
         return ret;
     }
 };
