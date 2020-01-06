@@ -4,19 +4,6 @@
 using namespace std;
 
 class Solution {
-    int multiply1(int dp[100], int num1, int num2) {
-        if (!num1 || !num2) return 0;
-        int key = (num1 << 4) + num2;
-        if (dp[key]) return dp[key];
-        int ret = 0;
-        for (int i = 0; i < 4; ++i) {
-            if (num2 & (1 << i)) {
-                ret += num1 << i;
-            }
-        }
-        dp[key] = ret;
-        return ret;
-    }
 public:
     string multiply(string num1, string num2) {
         int len1 = num1.size();
@@ -25,17 +12,31 @@ public:
         const char *p2 = num2.c_str();
         char ret[512];
         memset(ret, 0, sizeof(ret));
-
-        int dp[160];
-        memset(dp, 0, sizeof(dp));
-        
+        char tmp[10];
         int cnt = 0;
-        for (int i = 0; i < len1; ++i) {
-            char number1 = num1[len1 - i - 1] - 48;
-            for (int j = 0; j < len2; ++j) {
-                char number2 = num2[len2 - j - 1] - 48;
-                char value = number1 * number2;
-                // int value = multiply1(dp, number1, number2);
+
+        int s1 = (len1 - 4) / 4 * 4 + (len1 % 4);
+        if (len1 < 4) s1 = 0;
+        for (int i = 0; i < len1; i += 4, s1 -= 4) {
+            s1 = max(0, s1);
+            // int s1 = len1 - i * 4 - 1;
+            int len = (len1 - i >= 4) ? 4 : len1 - i;
+            strncpy(tmp, p1 + s1, len);
+            tmp[len] = 0;
+            int num1 = atoi(tmp);
+
+
+            int s2 = (len2 - 4) / 4 * 4 + (len2 % 4);
+            if (len2 < 4) s2 = 0;
+            for (int j = 0; j < len2; j += 4, s2 -= 4) {
+                s2 = max(0, s2);
+                // int s2 = len2 - i * 4 - 1;
+                int len = (len2 - j >= 4) ? 4 : len2 - j;
+                strncpy(tmp, p2 + s2, len);
+                tmp[len] = 0;
+                int num2 = atoi(tmp);
+
+                int value = num1 * num2;
                 int start = i + j;
                 int add = 0;
                 while (value || add) {
@@ -58,10 +59,10 @@ public:
             int j = cnt - i - 1;
             char ch1 = ret[i];
             char ch2 = ret[j];
-            ret[i] = ch2 + 48;
-            ret[j] = ch1 + 48;
+            ret[i] = ch2 + '0';
+            ret[j] = ch1 + '0';
         }
-        if (cnt & 1) ret[len] += 48;
+        if (cnt & 1) ret[len] += '0';
 
         return ret;
     }
