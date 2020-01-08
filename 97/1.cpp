@@ -5,22 +5,21 @@
 using namespace std;
 
 class Solution {
-    void check1(const string& s1, const string& s2, const string& s3, 
-        bool* idxs, bool* dp, int n, int x, int y) {
+    bool check1(const string& s1, const string& s2, const string& s3, 
+        bool* idxs, int n, int x, int y) {
         int sIdx = x + y;
-        if (sIdx == s3.size()) return;
+        if (sIdx == s3.size()) return true;
         int idx = y * n + x;
-        if (idxs[idx]) return;
+        if (idxs[idx]) return false;
         idxs[idx] = true;
         char ch = s3[sIdx];
         if (x < s1.size() && s1[x] == ch) {
-            dp[y * n + (x + 1)] = true;
-            check1(s1, s2, s3, idxs, dp, n, x + 1, y);
+            if (check1(s1, s2, s3, idxs, n, x + 1, y)) return true;
         }
         if (y < s2.size() && s2[y] == ch) {
-            dp[(y + 1) * n + x] = true;
-            check1(s1, s2, s3, idxs, dp, n, x, y + 1);
+            if (check1(s1, s2, s3, idxs, n, x, y + 1)) return true;
         }
+        return false;
     }
 public:
     bool isInterleave(string s1, string s2, string s3) {
@@ -39,13 +38,12 @@ public:
         int n = len1 + 1;
         int len = n * (len2 + 1);
         // int dp[len2 + 1][n];
-        bool dp[len];
-        memset(dp, 0, sizeof(dp));
+        // bool dp[len];
+        // memset(dp, 0, sizeof(dp));
         bool idxs[len];
         memset(idxs, 0, sizeof(idxs));
 
-        check1(s1, s2, s3, idxs, dp, n, 0, 0);
-        return dp[len - 1];
+        return check1(s1, s2, s3, idxs, n, 0, 0);
     }
 };
 
