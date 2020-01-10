@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <stack>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -14,6 +16,37 @@ class Solution {
         }
         cout << endl;
     }
+
+    int largestRectangleArea(vector<int>& heights) {
+        int len = heights.size();
+        if (!len) return 0;
+
+        stack<int> nums;
+        nums.push(-1);
+
+        int ret = 0;
+        for (int i = 0; i < len; ++i) {
+            int h = heights[i];
+            while (1) {
+                int tidx = nums.top();
+                int tnum = tidx >= 0 ? heights[tidx] : 0;
+                if (tnum <= h) break;
+                nums.pop();
+                ret = max(ret, (i - nums.top() - 1) * tnum);
+            }
+            nums.push(i);
+        }
+
+        while (1) {
+            int tidx = nums.top();
+            if (tidx == -1) break;
+            int tnum = heights[tidx];
+            nums.pop();
+            ret = max(ret, (len - nums.top() - 1) * tnum);
+        }
+
+        return ret;
+    }
 public:
     int maximalRectangle(vector<vector<char>>& matrix) {
         int m = matrix.size();
@@ -21,51 +54,31 @@ public:
         int n = matrix[0].size();
         if (!n) return 0;
 
-        int row = m + 1;
-        int col = n + 1;
-        // int height[row][col];
-        int left[row][col];
-        // int right[row][col];
+        int row = m;
+        int col = n;
 
-        // memset(height, 0, sizeof(height));
-        memset(left, 0, sizeof(left));
-        // memset(right, 0, sizeof(right));
+        // int heights[row][col];
+        // memset(heights, 0, sizeof(heights));
 
         int ret = 0;
-        for (int i = 1; i < row; ++i) {
-            // right[i][n] = matrix[i - 1][n - 1] - '0';
-            for (int j = 1; j < col; ++j) {
-                if (matrix[i - 1][j - 1] == '1') {
-                    // height[i][j] = height[i - 1][j] + 1;
-                    left[i][j] = left[i][j - 1] + 1;
+        vector<int> heights(col);
 
-                    int maxWidth = left[i][j];
-                    int maxArea = 0;
-                    for (int k = i; k > 0; --k) {
-                        maxArea = max(maxArea, maxWidth * (i - k + 1));
-                        maxWidth = min(maxWidth, left[k - 1][j]);
-                    }
-                    ret = max(ret, maxArea);
+        stack<int> nums;
+        nums.push(-1);
+        for (int i = 0; i < row; ++i) {
+            auto& row = matrix[i];
+            for (int j = 0; j < col; ++j) {
+                int h = 0;
+                if (matrix[i][j] == '1') {
+                    h = heights[i] + 1;
                 }
+                heights[i] = h;
+                while (nums.top() > h) {
+
+                }
+                nums.push(i);
             }
-            // for (int j = n; j > 0; --j) {
-            //     if (matrix[i - 1][j - 1] == '1') {
-            //         right[i][j] = right[i][j + 1] + 1;
-
-            //         int max1 = 0;
-            //         for (int k = 0; k < i; ++k) {
-            //             int h = height[k][j];
-            //             if (!h) break;
-            //             int area = h * (left[k][j] + right[k][j] - 1);
-            //             ret = max(ret, area);
-            //         }
-            //     }
-            // }
         }
-
-        // print2DArray((int*)height, row, col);
-        // print2DArray((int*)left, row, col);
-        // print2DArray((int*)right, row, col);
 
         return ret;
     }
