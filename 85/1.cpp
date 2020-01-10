@@ -69,14 +69,24 @@ public:
             auto& row = matrix[i];
             for (int j = 0; j < col; ++j) {
                 int h = 0;
-                if (matrix[i][j] == '1') {
-                    h = heights[i] + 1;
+                if (row[j] == '1') {
+                    h = heights[j] + 1;
                 }
-                heights[i] = h;
-                while (nums.top() > h) {
-
+                heights[j] = h;
+                int top = nums.top();
+                int h1;
+                while (top != -1 && (h1 = heights[top]) > h) {
+                    nums.pop();
+                    ret = max(ret, h1 * (j - (top = nums.top()) - 1));
                 }
-                nums.push(i);
+                nums.push(j);
+            }
+            int h = heights[col - 1];
+            int top = nums.top();
+            while (top != -1) {
+                // top = nums.top();
+                nums.pop();
+                ret = max(ret, heights[top] * (col - (top = nums.top()) - 1));
             }
         }
 
