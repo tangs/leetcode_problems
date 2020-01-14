@@ -12,23 +12,10 @@ class Solution {
         }
         return true;
     }
-
-    inline bool isOk(unordered_map<int, int>& nums1, unordered_map<int, int>& nums2) {
-        // for (int i = 0; i < 128; ++i) {
-        //     if (nums1[i] && nums1[i] > nums2[i]) return false;
-        // }
-        if (nums2.size() < nums1.size()) return false;
-        for (auto it: nums1) {
-            if (it.second > nums2[it.first]) return false;
-        }
-        return true;
-    }
 public:
     string minWindow(string s, string t) {
         int tlen = t.size();
-        // long bits = 0;
         int destNums[128];
-        // unordered_map<int, int> destNums;
         memset(destNums, 0, sizeof(destNums));
         for (char ch: t) {
             ++destNums[ch];
@@ -40,8 +27,6 @@ public:
         int dests = -1;
         int nums[128];
         memset(nums, 0, sizeof(nums));
-
-        // unordered_map<int, int> nums;
 
         int i = 0;
         for (int j = 0; j < len; ++j) {
@@ -56,15 +41,15 @@ public:
                         min = len2;
                         dests = i;
                     }
-                    --nums[s[i++]];
+                    char ch = s[i++];
+                    --nums[ch];
                     --len2;
-                    if (!isOk(destNums, nums)) {
+                    if (nums[ch] < destNums[ch]) {
                         break;
                     }
                 }
             }
         }
-        // }
         if (dests == -1) return "";
         else return s.substr(dests, min);
     }
