@@ -8,23 +8,26 @@ using namespace std;
 class Solution {
 public:
     string minWindow(string s, string t) {
-        int bits = 0;
+        long bits = 0;
         for (char ch: t) {
-            bits |= 1 << (ch - 'A');
+            int num = ch >= 'a' ? ch - 'a' + 32 : ch - 'A';
+            bits |= 1l << num;
         }
 
         int len = s.size();
-        int dp[len + 1];
+        long dp[len + 1];
         // memset(dp, 0, sizeof(dp));
         int min = INT_MAX;
         int dests = -1;
         for (int i = 0; i < len; ++i) {
-            dp[0] = 0;
+            dp[i] = 0;
             for (int j = i; j < len; ++j) {
-                int bit = s[j] - 'A';
-                dp[j + 1] = dp[j] | (1 << bit);
+                // long bit = s[j] - 'A';
+                char ch = s[j];
+                int num = ch >= 'a' ? ch - 'a' + 32 : ch - 'A';
+                dp[j + 1] = dp[j] | (1l << num);
                 int len = j - i + 1;
-                if (len < min && ((bits ^ dp[j + 1]) & bits) == 0) {
+                if (len < min && (bits ^ dp[j + 1] & bits) == 0) {
                     min = len;
                     dests = i;
                 }
