@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 using namespace std;
@@ -12,11 +12,23 @@ class Solution {
         }
         return true;
     }
+
+    inline bool isOk(unordered_map<int, int>& nums1, unordered_map<int, int>& nums2) {
+        // for (int i = 0; i < 128; ++i) {
+        //     if (nums1[i] && nums1[i] > nums2[i]) return false;
+        // }
+        if (nums2.size() < nums1.size()) return false;
+        for (auto it: nums1) {
+            if (it.second > nums2[it.first]) return false;
+        }
+        return true;
+    }
 public:
     string minWindow(string s, string t) {
         int tlen = t.size();
         // long bits = 0;
         int destNums[128];
+        // unordered_map<int, int> destNums;
         memset(destNums, 0, sizeof(destNums));
         for (char ch: t) {
             ++destNums[ch];
@@ -29,15 +41,14 @@ public:
         int nums[128];
         memset(nums, 0, sizeof(nums));
 
+        // unordered_map<int, int> nums;
+
         int i = 0;
         for (int j = 0; j < len; ++j) {
             ++nums[s[j]];
             if (isOk(destNums, nums)) {
-                // int len1 = j - i + 1;
-                for (int len2 = j - i + 1; len2 >= tlen; --len2) {
-                    if (!isOk(destNums, nums)) {
-                        break;
-                    }
+                int len1 = j - i + 1;
+                for (int len2 = len1; len2 >= tlen; ) {
                     if (len2 == tlen) {
                         return s.substr(i, len2);
                     }
@@ -46,6 +57,10 @@ public:
                         dests = i;
                     }
                     --nums[s[i++]];
+                    --len2;
+                    if (!isOk(destNums, nums)) {
+                        break;
+                    }
                 }
             }
         }
