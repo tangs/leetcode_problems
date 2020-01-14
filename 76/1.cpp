@@ -6,8 +6,11 @@
 using namespace std;
 
 class Solution {
+    inline int getIdx(char ch) {
+        return ch >= 'a' ? ch - 'a' + 26 : ch - 'A';
+    }
     inline bool isOk(int* nums1, int* nums2) {
-        for (int i = 0; i < 128; ++i) {
+        for (int i = 0; i < 52; ++i) {
             if (nums1[i] && nums1[i] > nums2[i]) return false;
         }
         return true;
@@ -15,22 +18,22 @@ class Solution {
 public:
     string minWindow(string s, string t) {
         int tlen = t.size();
-        int destNums[128];
+        int destNums[52];
         memset(destNums, 0, sizeof(destNums));
         for (char ch: t) {
-            ++destNums[ch];
+            ++destNums[getIdx(ch)];
         }
 
         int len = s.size();
 
         int min = INT_MAX;
         int dests = -1;
-        int nums[128];
+        int nums[52];
         memset(nums, 0, sizeof(nums));
 
         int i = 0;
         for (int j = 0; j < len; ++j) {
-            ++nums[s[j]];
+            ++nums[getIdx(s[j])];
             if (isOk(destNums, nums)) {
                 int len1 = j - i + 1;
                 for (int len2 = len1; len2 >= tlen; ) {
@@ -42,9 +45,10 @@ public:
                         dests = i;
                     }
                     char ch = s[i++];
-                    --nums[ch];
+                    int idx = getIdx(ch);
+                    --nums[idx];
                     --len2;
-                    if (nums[ch] < destNums[ch]) {
+                    if (nums[idx] < destNums[idx]) {
                         break;
                     }
                 }
