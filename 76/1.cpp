@@ -23,9 +23,9 @@ public:
             if (--destNums[s[right]] >= 0) ++cnt; else continue;
             while (cnt == tlen) {
                 int len2 = right - left + 1;
-                if (len2 == tlen) {
-                    return s.substr(left, len2);
-                }
+                // if (len2 == tlen) {
+                //     return s.substr(left, len2);
+                // }
                 if (len2 < min) {
                     min = len2;
                     dests = left;
