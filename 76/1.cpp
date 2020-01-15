@@ -32,9 +32,12 @@ public:
         memset(nums, 0, sizeof(nums));
 
         int i = 0;
+        int cnt;
         for (int j = 0; j < len; ++j) {
-            ++nums[getIdx(s[j])];
-            if (isOk(destNums, nums)) {
+            int idx1 = getIdx(s[j]);
+            ++nums[idx1];
+            if (destNums[idx1] > 0) ++cnt; else continue;
+            if (cnt >= tlen && isOk(destNums, nums)) {
                 int len1 = j - i + 1;
                 for (int len2 = len1; len2 >= tlen; ) {
                     if (len2 == tlen) {
@@ -46,6 +49,7 @@ public:
                     }
                     char ch = s[i++];
                     int idx = getIdx(ch);
+                    if (destNums[idx] > 0) --cnt;
                     --nums[idx];
                     --len2;
                     if (nums[idx] < destNums[idx]) {
