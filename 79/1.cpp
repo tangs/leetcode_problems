@@ -7,32 +7,29 @@ using namespace std;
 
 class Solution {
     bool deal(vector<vector<char>>& board, const string& word, 
-    unordered_set<int>& poses, int m, int n, int pos) {
-        if (poses.find(pos) != poses.end()) return false;
-        poses.insert(pos);
+    bool *dp, int m, int n, int x, int y, int poslen) {
+        int pos = x * n + y;
+        if (dp[pos]) return false;
+        dp[pos] = true;
+        ++poslen;
         int desetlen = word.size();
-        int poslen = poses.size();
         if (desetlen == poslen) return true;
 
-        int r = pos >> 16;
-        int c = pos % (1 << 16);
-
-        static vector<pair<int, int>> dfs = {
-            { 0, 1 },
-            { 0, -1 },
-            { 1, 0 },
-            { -1, 0}
-        };
-
         char dest = word[poslen];
-        for (auto& it : dfs) {
-            int x = r + it.first;
-            int y = c + it.second;
-            if (x >= 0 && x < m && y >= 0 && y < n && board[x][y] == dest) {
-                if (deal(board, word, poses, m, n, (x << 16) + y)) return true;
-            }
+        if (x > 0 && board[x - 1][y] == dest) {
+            if (deal(board, word, dp, m, n, x - 1, y, poslen)) return true;
         }
-        poses.erase(poses.find(pos));
+        if (x < m - 1 && board[x + 1][y] == dest) {
+            if (deal(board, word, dp, m, n, x + 1, y, poslen)) return true;
+        }
+        if (y > 0 && board[x][y - 1] == dest) {
+            if (deal(board, word, dp, m, n, x, y - 1, poslen)) return true;
+        }
+        if (y < n - 1 && board[x][y + 1] == dest) {
+            if (deal(board, word, dp, m, n, x, y + 1, poslen)) return true;
+        }
+
+        dp[pos] = false;
         return false;
     }
 public:
@@ -44,17 +41,15 @@ public:
         if (!n) return false;
 
         char f = word[0];
-
-        unordered_set<int> poses;
-        // vector<int> starts;
+        bool dp[m * n];
+        memset(dp, 0, sizeof(dp));
+        
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
-                // if (board[i][j] == f) starts.push_back((i << 16) + j);
                 if (board[i][j] == f) {
-                    poses.clear();
-                    if (deal(board, word, poses, m, n, (i << 16) + j)) return true;
+                    if (deal(board, word, dp, m, n, i, j, 0)) 
+                        return true;
                 }
-
             }
         }
         return false;
