@@ -8,41 +8,35 @@ struct ListNode {
      ListNode *next;
      ListNode(int x) : val(x), next(NULL) {}
  };
+
 class Solution {
 public:
     ListNode* partition(ListNode* head, int x) {
         if (!head) return NULL;
+        
+        ListNode* ret = head;
+        ListNode* l = NULL;
+        ListNode* lhead = NULL;
+        ListNode* r = NULL;
+        ListNode* rhead = NULL;
+
         ListNode* p = head;
-        vector<ListNode*> vec1;
-        vector<ListNode*> vec2;
-        // vector<ListNode*> vec3;
-        int l = 0;
         while (p) {
             if (p->val < x) {
-                vec1.push_back(p);
+                if (l) l->next = p;
+                else lhead = p;
+                l = p;
             } else {
-                vec2.push_back(p);
+                if (r) r->next = p;
+                else rhead = p;
+                r = p;
             }
-            p = p->next;
+            p = p->next;            
         }
-        
-        p = NULL;
-        // ListNode* prev = NULL;
+        if (l) l->next = rhead;
+        if (r) r->next = NULL;
 
-        for (auto cur: vec1) {
-            if (!p) head = cur;
-            if (p) p->next = cur;
-            p = cur;
-            p->next = NULL;
-        }
-        for (auto cur: vec2) {
-            if (!p) head = cur;
-            if (p) p->next = cur;
-            p = cur;
-            p->next = NULL;
-        }
-
-        return head;
+        return lhead ? lhead : rhead;
     }
 };
 
