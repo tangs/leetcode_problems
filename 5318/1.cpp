@@ -39,7 +39,7 @@ public:
                     int prevr = getr(ranges, idxs, idxs.size() - 1);
                     if (l <= tl || prevr >= l)
                         idxs.pop_back();
-                        else break;
+                    else break;
                 } else {
                     break;
                 }
