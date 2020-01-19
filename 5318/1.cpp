@@ -32,8 +32,10 @@ public:
                 int tv = ranges[top];
                 int tl = max(0, top - tv);
                 int tr = min(n, top + tv);
-                if (r <= tr) needPush = false;
-                if (r > tr) {
+                if (r <= tr || l > tr) {
+                    needPush = false;
+                    break;
+                } else if (r > tr) {
                     int prevr = getr(ranges, idxs, idxs.size() - 1);
                     if (l <= tl || prevr >= l)
                         idxs.pop_back();
@@ -47,30 +49,11 @@ public:
             }
         }
 
-        int l = INT_MIN;
-        int r = -1;
         int len1 = idxs.size();
         if (!len1) return -1;
-        // while (idxs.size()) {
-        for (int idx: idxs) {
-            // int idx = idxs.back();
-            int range = ranges[idx];
-            // // idxs.pop();
-            // if (idx - range <= 0) l = true;
-            // if (idx + range >= n) r = true;
-            int l1 = idx - range;
-            int r1 = idx + range;
-            if (l == INT_MIN) {
-                l = l1;
-                r = r1;
-            } else {
-                if (l1 > r) 
-                    return -1;
-                l = min(l, l1);
-                r = max(r, r1);
-            }
-        }
-        return l <= 0 && r >= n ? len1 : -1;
+        int lastidx = idxs.back();
+        int r = lastidx + ranges[lastidx];
+        return r >= n ? len1 : -1;
     }
 };
 
