@@ -6,13 +6,11 @@
 using namespace std;
 
 class Solution {
-    inline int getr(vector<int>& ranges, vector<int>& idxs, int len) {
-        int r = -1;
-        for (int i = 0; i < len; ++i) {
-            int idx = idxs[i];
-            r = max(r, idx + ranges[idx]);
-        }
-        return r;
+    inline int getr(vector<int>& ranges, vector<int>& idxs) {
+        int len = idxs.size();
+        if (len < 2) return - 1;
+        int idx = idxs[len - 2];
+        return idx + ranges[idx];
     }
 public:
     int minTaps(int n, vector<int>& ranges) {
@@ -36,7 +34,7 @@ public:
                     needPush = false;
                     break;
                 } else if (r > tr) {
-                    int prevr = getr(ranges, idxs, idxs.size() - 1);
+                    int prevr = getr(ranges, idxs);
                     if (l <= tl || prevr >= l)
                         idxs.pop_back();
                     else break;
