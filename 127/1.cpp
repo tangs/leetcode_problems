@@ -7,24 +7,31 @@ using namespace std;
 
 class Solution {
     struct Node {
-        string val;
+        const string* val;
         unordered_set<Node*> children;
-        Node(string str): val(str) {}
+        Node(const string& str): val(&str) {}
         Node() {} 
     };
-    void calcLen(Node* node, unordered_map<Node*, int>& used, const string& endWord, int &ret, int len) {
-        if (len >= ret || used[node] <= len) return;
-        used[node] = len;
-        if (node->val == endWord) {
-            if (ret > len) ret = len;
-            return;
+
+    int calcLen1(Node* root, const string& endWord) {
+        unordered_set<Node*> nodes;
+        unordered_set<Node*> used;
+        int len = 1;
+        nodes.insert(root);
+        while (nodes.size()) {
+            unordered_set<Node*> next;
+            for (auto node: nodes) {
+                if (used.find(node) != used.end()) continue;
+                if (*node->val == endWord) return len;
+                used.insert(node);
+                next.insert(node->children.begin(), node->children.end());
+            }
+            nodes.swap(next);
+            ++len;
         }
-        for (auto child: node->children)
-            used[child] = len + 2;
-        for (auto child: node->children)
-            calcLen(child, used, endWord, ret, len + 1);
-        // used.erase(used.find(node));
+        return 0;
     }
+
     bool check(const string& str1, const string& str2) {
         int size = str1.size();
         int ret = 0;
@@ -44,21 +51,18 @@ public:
         }
         if (!hasEnd) return 0;
         for (int i = 0; i < len; ++i) {
-            auto str1 = wordList[i];
+            auto& str1 = wordList[i];
             auto& node1 = nodes[str1];
             used[&node1] = INT_MAX;
             for (int j = i + 1; j < len; ++j) {
-                auto str2 = wordList[j];
+                auto& str2 = wordList[j];
                 if (!check(str1, str2)) continue;
                 auto& node2 = nodes[str2];
                 node1.children.insert(&node2);
                 node2.children.insert(&node1);
             }
         }
-
-        int ret = INT_MAX;
-        calcLen(&nodes[beginWord], used, endWord, ret, 1);
-        return ret == INT_MAX ? 0 : ret;
+        return calcLen1(&nodes[beginWord], endWord);
     }
 };
 
