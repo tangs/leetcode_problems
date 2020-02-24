@@ -41,10 +41,9 @@ class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         bool hasEnd = false;
-        wordList.push_back(beginWord);
+        wordList.push_back(move(beginWord));
         int len = wordList.size();
-        unordered_map<string, Node> nodes;
-        unordered_map<Node*, int> used;
+        unordered_map<string*, Node> nodes;
         for (auto& word: wordList) {
             if (word == endWord) hasEnd = true;
             nodes.emplace(word, word);
@@ -52,17 +51,17 @@ public:
         if (!hasEnd) return 0;
         for (int i = 0; i < len; ++i) {
             auto& str1 = wordList[i];
-            auto& node1 = nodes[str1];
-            used[&node1] = INT_MAX;
+            auto& node1 = nodes[&str1];
+            auto& children1 = node1.children;
             for (int j = i + 1; j < len; ++j) {
                 auto& str2 = wordList[j];
                 if (!check(str1, str2)) continue;
-                auto& node2 = nodes[str2];
-                node1.children.insert(&node2);
+                auto& node2 = nodes[&str2];
+                children1.insert(&node2);
                 node2.children.insert(&node1);
             }
         }
-        return calcLen1(&nodes[beginWord], endWord);
+        return calcLen1(&nodes[&wordList.back()], endWord);
     }
 };
 

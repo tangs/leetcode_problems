@@ -60,19 +60,11 @@ public:
                             }
                         }
                     }
-
-                    if (j == 0 && i < len - 1 && dp[j][col] && 
-                    words_set.find(word.substr(i + 1, len - i - 1)) != words_set.end()) {
-                        ret.push_back(move(word));
-                        goto end1;
-                    }
                 }
             }
 
             if (dp[0][len - 1]) 
                 ret.push_back(move(word));
-end1:
-            ;
         }
         return ret;
     }
