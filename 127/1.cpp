@@ -6,71 +6,73 @@
 using namespace std;
 
 class Solution {
-    struct Node {
-        const string* val;
-        unordered_set<Node*> children;
-        Node(const string& str): val(&str) {}
-        Node() {} 
-    };
-
-    int calcLen1(Node* root, const string& endWord) {
-        unordered_set<Node*> nodes;
-        unordered_set<Node*> used;
-        int len = 1;
-        nodes.insert(root);
-        while (nodes.size()) {
-            unordered_set<Node*> next;
-            for (auto node: nodes) {
-                if (used.find(node) != used.end()) continue;
-                if (*node->val == endWord) return len;
-                used.insert(node);
-                next.insert(node->children.begin(), node->children.end());
-            }
-            nodes.swap(next);
-            ++len;
-        }
-        return 0;
-    }
-
-    bool check(const string& str1, const string& str2) {
-        int size = str1.size();
-        int ret = 0;
-        for (int i = 0; i < size; ++i) if (str1[i] != str2[i]) if (++ret > 1) return false;
-        return ret == 1;
-    }
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        bool hasEnd = false;
-        wordList.push_back(move(beginWord));
-        int len = wordList.size();
-        unordered_map<string*, Node> nodes;
-        for (auto& word: wordList) {
-            if (word == endWord) hasEnd = true;
-            nodes.emplace(word, word);
-        }
-        if (!hasEnd) return 0;
-        for (int i = 0; i < len; ++i) {
-            auto& str1 = wordList[i];
-            auto& node1 = nodes[&str1];
-            auto& children1 = node1.children;
-            for (int j = i + 1; j < len; ++j) {
-                auto& str2 = wordList[j];
-                if (!check(str1, str2)) continue;
-                auto& node2 = nodes[&str2];
-                children1.insert(&node2);
-                node2.children.insert(&node1);
+        unordered_set<string> wordSet;
+        for (auto& word: wordList) wordSet.insert(move(word));
+
+        if (wordSet.find(endWord) == wordSet.end()) return 0;
+
+        unordered_set<string> wordsFront;
+        unordered_set<string> nextWordsFront;
+        unordered_set<string> reachedWordsFront;
+
+        unordered_set<string> wordsBack;
+        unordered_set<string> reachedWordsBack;
+
+        unordered_set<string>* words = &wordsFront;
+        unordered_set<string>* reachedWords = &reachedWordsFront;
+
+        wordsFront.insert(beginWord);
+        wordsBack.insert(endWord);
+
+        int depth = 1;
+        bool isFront = true;
+        while (words->size()) {
+            
+            unordered_set<string> nextWords;
+            auto& reachedWordsOpposite = isFront 
+            ? reachedWordsBack : reachedWordsFront;
+            for (auto word: *words) {
+                if (reachedWords->find(word) != reachedWords->end()) continue;
+                int len = word.size();
+                for (int i = 0; i < len; ++i) {
+                    char ch = word[i];
+                    for (char ch1 = 'a'; ch1 <= 'z'; ++ch1) {
+                        if (ch == ch1) continue;
+                        word[i] = ch1;
+                        if (reachedWordsOpposite.find(word) != reachedWordsOpposite.end()) 
+                            return depth;
+                        if (wordSet.find(word) != wordSet.end() && 
+                        reachedWords->find(word) == reachedWords->end())
+                            nextWords.insert(word);
+                        word[i] = ch;
+                    }
+                }
+                reachedWords->insert(move(word));
             }
+            words->swap(nextWords);
+            if (isFront) {
+                words = &wordsBack;
+                reachedWords = &reachedWordsBack;
+            } else {
+                words = &wordsFront;
+                reachedWords = &reachedWordsFront;
+            }
+            ++depth;
+            isFront = !isFront;
         }
-        return calcLen1(&nodes[&wordList.back()], endWord);
+        return 0;
     }
 };
 
 int main() {
     std:vector<string> words = {
-        "si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"
-        "hot","dot","dog","lot","log","cog"
+        // "si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"
+        // "hot","dot","dog","lot","log","cog"
+        "hot","dot","dog","lot","log"
     };
     Solution solution;
-    // solution.ladderLength("hit", "cog", words);
-    solution.ladderLength("qa", "sq", words);
+    solution.ladderLength("hit", "cog", words);
+    // solution.ladderLength("qa", "sq", words);
 }
