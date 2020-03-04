@@ -19,51 +19,26 @@ public:
         for (auto& arr: prerequisites)
             adj[arr[0]].push_back(arr[1]);
 
-
         int color[numCourses];
-        int pi[numCourses];
 
         memset(color, 0, sizeof(color));
+        vector<int> ret;
 
         std::function<bool(int)> dfs_visit;
         dfs_visit = [&] (int idx) {
             color[idx] = GRAY;
             for (int idx1: adj[idx]) {
-                pi[idx1] = idx;
                 if (color[idx1] == GRAY) return false;
                 if (color[idx1]) continue;
                 if (!dfs_visit(idx1)) return false;
             }
             color[idx] = BLACK;
+            ret.push_back(idx);
             return true;
         };
         
-        vector<int> ret;
-
-        for (int i = 0; i < numCourses; ++i) {
-            if (color[i]) continue;
-            pi[i] = -1;
-            if (!dfs_visit(i)) return ret;
-        }
-
-        unordered_set<int> heads;
-        for (int i = 0; i < numCourses; ++i) if (pi[i] == -1) heads.insert(i);
-
-        if (!heads.size()) return ret;
-        memset(color, 0, sizeof(color));
-
-        std::function<void(int)> dfs_visit1;
-        dfs_visit1 = [&] (int idx) {
-            color[idx] = GRAY;
-            for (int idx1: adj[idx]) {
-                if (!color[idx1]) dfs_visit1(idx1);
-            }
-            color[idx] = BLACK;
-            ret.push_back(idx);
-        };
-        for (int idx: heads) {
-            dfs_visit1(idx);
-        }
+        for (int i = 0; i < numCourses; ++i)
+            if (!color[i] && !dfs_visit(i)) return {};
 
         return ret;
     }
