@@ -11,7 +11,7 @@ public:
     int majorityElement(vector<int>& nums) {
         int val = nums.size() / 2;
         unordered_set<int, int> s;
-        for (int num: nums) if (s[1] > val) return num;
+        // for (int num: nums) if (s[1] > val) return num;
         return 0;
     }
 };
