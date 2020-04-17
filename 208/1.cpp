@@ -8,33 +8,22 @@
 
 using namespace std;
 
-struct Tree {
-    Tree* children[32];
-    bool val;
-    Tree(): val(false) {
-        memset(children, 0, sizeof(children));
-    }
-    ~Tree() {
-        for (int i = 0; i < 32; ++i)
-            if (children[i]) delete children[i];
-    }
-};
-
 class Trie {
-    Tree root;
+    Trie* children[32];
+    bool val;
 public:
     /** Initialize your data structure here. */
     Trie() {
-
+        memset(this, 0, sizeof(Trie));
     }
     
     /** Inserts a word into the trie. */
     void insert(string word) {
-        Tree* tree = &root;
+        Trie* tree = this;
         for (char ch: word) {
             char key = ch - 'a';
             if (!tree->children[key])
-                tree->children[key] = new Tree();
+                tree->children[key] = new Trie();
             tree = tree->children[key];
         }
         tree->val = true;
@@ -42,7 +31,7 @@ public:
     
     /** Returns if the word is in the trie. */
     bool search(string word) {
-        Tree* tree = &root;
+        Trie* tree = this;
         for (char ch: word) {
             tree = tree->children[ch - 'a'];
             if (!tree) return false;
@@ -52,7 +41,7 @@ public:
     
     /** Returns if there is any word in the trie that starts with the given prefix. */
     bool startsWith(string prefix) {
-        Tree* tree = &root;
+        Trie* tree = this;
         for (char ch: prefix) {
             tree = tree->children[ch - 'a'];
             if (!tree) return false;
