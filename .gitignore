@@ -2,4 +2,6 @@ main
 *.dSYM
 .vscode
 .DS_Store
+cmake-build-*
+.idea/
 
