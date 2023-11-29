@@ -1,6 +1,3 @@
-#include <vector>
-#include <string>
-#include <list>
 #include <set>
 
 class SmallestInfiniteSet {
@@ -10,7 +7,7 @@ public:
   SmallestInfiniteSet() = default;
 
   int popSmallest() {
-    if (nums.empty())  return next++;
+    if (nums.empty()) return next++;
     const auto it = nums.cbegin();
     const auto ret = *it;
     nums.erase(it);
