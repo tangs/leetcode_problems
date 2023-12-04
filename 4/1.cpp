@@ -6,6 +6,7 @@
 #include <string>
 #include <queue>
 #include <sstream>
+#include <functional>
 
 using namespace std;
 
