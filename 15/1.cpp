@@ -3,7 +3,7 @@
 
 class Solution {
 public:
-  std::vector<std::vector<int>> threeSum(const std::vector<int>& nums) {
+  std::vector<std::vector<int>> threeSum(std::vector<int>& nums) {
     const auto n = nums.size();
     std::sort(nums.begin(), nums.end());
 
