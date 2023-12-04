@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 include_directories(1326)
 
+add_executable(4 4/1.cpp)
 add_executable(15 15/1.cpp)
 add_executable(828 828/1.cpp)
 add_executable(907 907/1.cpp)
