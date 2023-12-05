@@ -1,13 +1,12 @@
 #include <vector>
-#include <cstring>
 
 class Solution {
     long long ans_ = 0;
     int seats_ = 0;
 public:
-    long long dfs(const std::vector<std::vector<int>>& adjs, bool* visited, int index) {
+    long long dfs(const std::vector<std::vector<int>>& adjs, std::vector<bool>& visited, int index) {
         visited[index] = true;
-        int people = 1;
+        auto people = 1LL;
         const auto& adj = adjs[index];
         for (const auto next: adj) {
             if (visited[next]) continue;
@@ -22,8 +21,9 @@ public:
         ans_ = 0;
         seats_ = seats;
         const auto n = roads.size() + 1;
-        bool visited[n];
-        memset(visited, 0, sizeof visited);
+        // bool visited[n];
+        // memset(visited, 0, sizeof visited);
+        std::vector<bool> visited(n);
 
         std::vector<std::vector<int>> adjs(n);
         for (const auto& road: roads) {
