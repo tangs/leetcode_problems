@@ -1,5 +1,5 @@
 #include <string>
-#include <set>
+#include <algorithm>
 #include <array>
 
 class Solution {
