@@ -1,2 +1,2 @@
 # solution 1 
-深度优先(bfs)
+深度优先(dfs)

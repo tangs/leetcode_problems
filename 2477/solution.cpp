@@ -1,4 +1,5 @@
 #include <vector>
+#include <cstring>
 
 class Solution {
     long long ans_ = 0;
