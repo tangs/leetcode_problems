@@ -1,5 +1,8 @@
 # LeetCode problems with cpp. 
 
+[![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/tangs/leetcode_problems#license)
+[![CI](https://github.com/bevyengine/bevy/workflows/CI/badge.svg)](https://github.com/tangs/leetcode_problems/actions)
+
 ## problem 907
 
 ### test
