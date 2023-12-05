@@ -1,5 +1,3 @@
-#include <vector>
-#include <stack>
 #include <deque>
 
 class FrontMiddleBackQueue {
