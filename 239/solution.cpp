@@ -12,8 +12,8 @@ public:
 
         const auto n = nums.size();
         for (int i = k; i < n; ++i) {
-            auto remove_idx = nums[i - k];
-            if (const auto it = curs.find(remove_idx); --it->second == 0) curs.erase(it);
+            auto remove_key = nums[i - k];
+            if (const auto it = curs.find(remove_key); --it->second == 0) curs.erase(it);
             ++curs[nums[i]];
             ans.push_back(curs.crbegin()->first);
         }
