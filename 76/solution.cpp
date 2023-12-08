@@ -1,6 +1,7 @@
 #include <string>
 #include <unordered_map>
 #include <string_view>
+#include <optional>
 
 class Solution {
 public:
