@@ -2,7 +2,9 @@ project(leetcode_problems)
 
 cmake_minimum_required(VERSION 3.27)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+
+include_directories(./)
 
 add_executable(3 3/solution.cpp)
 add_executable(4 4/1.cpp)
@@ -22,6 +24,7 @@ add_executable(1423 1423/solution.cpp)
 add_executable(1466 1466/solution.cpp)
 add_executable(1657 1657/1.cpp)
 add_executable(1670 1670/1.cpp)
+add_executable(2008 2008/solution.cpp)
 add_executable(2336 2336/1.cpp)
 add_executable(2477 2477/solution.cpp)
 add_executable(2661 2661/1.cpp)
