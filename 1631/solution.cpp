@@ -1,5 +1,6 @@
 #include <vector>
 #include <limits>
+#include <functional>
 
 #include "utils/utils.h"
 
