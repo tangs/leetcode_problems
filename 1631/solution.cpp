@@ -1,4 +1,6 @@
 #include <vector>
+#include <limits>
+
 #include "utils/utils.h"
 
 class Solution {
