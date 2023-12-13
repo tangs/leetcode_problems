@@ -14,5 +14,10 @@ public:
 };
 
 int main() {
+    Solution solution;
+    auto ret0 = solution.makeSmallestPalindrome("egcfe");
+    auto ret1 = solution.makeSmallestPalindrome("abcd");
+    auto ret2 = solution.makeSmallestPalindrome("seven");
 
+    return 0;
 }
