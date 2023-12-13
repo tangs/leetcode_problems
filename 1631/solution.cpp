@@ -1,7 +1,5 @@
 #include <vector>
 #include <limits>
-#include <unordered_set>
-#include <functional>
 
 #include "utils/utils.h"
 
@@ -12,14 +10,12 @@ public:
         const auto columns = heights[0].size();
 
         std::vector<std::vector<int>> dp(rows, std::vector<int>(columns, std::numeric_limits<int>::max()));
+        std::vector<std::tuple<int, int, int, int>> nexts;
 
         dp[0][0] = 0;
-
-        std::vector<std::tuple<int, int, int, int>> nexts;
         nexts.emplace_back(0, 0, 0, 0);
 
-        auto try_update = [rows, columns, &dp, &heights] (int fx, int fy, int tx, int ty) {
-            if (tx < 0 || tx >= rows || ty < 0 || ty >= columns) return false;
+        auto try_update = [&dp, &heights] (int fx, int fy, int tx, int ty) {
             auto val = std::max(dp[fx][fy], std::abs(heights[tx][ty] - heights[fx][fy]));
             if (val >= dp[tx][ty]) return false;
             dp[tx][ty] = val;
@@ -30,10 +26,10 @@ public:
             std::vector<std::tuple<int, int, int, int>> nexts1;
             for (auto& next: nexts) {
                 const auto [fx, fy, tx, ty] = next;
-                if (try_update(tx, ty, tx, ty + 1)) nexts1.emplace_back(tx, ty, tx, ty + 1);
-                if (try_update(tx, ty, tx, ty - 1)) nexts1.emplace_back(tx, ty, tx, ty - 1);
-                if (try_update(tx, ty, tx + 1, ty)) nexts1.emplace_back(tx, ty, tx + 1, ty);
-                if (try_update(tx, ty, tx - 1, ty)) nexts1.emplace_back(tx, ty, tx - 1, ty);
+                if (ty < columns - 1 && try_update(tx, ty, tx, ty + 1)) nexts1.emplace_back(tx, ty, tx, ty + 1);
+                if (ty > 0 && try_update(tx, ty, tx, ty - 1)) nexts1.emplace_back(tx, ty, tx, ty - 1);
+                if (tx < rows - 1 && try_update(tx, ty, tx + 1, ty)) nexts1.emplace_back(tx, ty, tx + 1, ty);
+                if (tx > 0 && try_update(tx, ty, tx - 1, ty)) nexts1.emplace_back(tx, ty, tx - 1, ty);
             }
             nexts.swap(nexts1);
         }
