@@ -3,6 +3,13 @@
 
 #include "utils/utils.h"
 
+inline static bool try_update(std::vector<std::vector<int>>& dp, std::vector<std::vector<int>>& heights, int fx, int fy, int tx, int ty) {
+    auto val = std::max(dp[fx][fy], std::abs(heights[tx][ty] - heights[fx][fy]));
+    if (val >= dp[tx][ty]) return false;
+    dp[tx][ty] = val;
+    return true;
+}
+
 class Solution {
 public:
     int minimumEffortPath(std::vector<std::vector<int>>& heights) {
@@ -15,21 +22,14 @@ public:
         dp[0][0] = 0;
         nexts.emplace_back(0, 0, 0, 0);
 
-        auto try_update = [&dp, &heights] (int fx, int fy, int tx, int ty) {
-            auto val = std::max(dp[fx][fy], std::abs(heights[tx][ty] - heights[fx][fy]));
-            if (val >= dp[tx][ty]) return false;
-            dp[tx][ty] = val;
-            return true;
-        };
-
         while (!nexts.empty()) {
             std::vector<std::tuple<int, int, int, int>> nexts1;
             for (auto& next: nexts) {
                 const auto [fx, fy, tx, ty] = next;
-                if (ty < columns - 1 && try_update(tx, ty, tx, ty + 1)) nexts1.emplace_back(tx, ty, tx, ty + 1);
-                if (ty > 0 && try_update(tx, ty, tx, ty - 1)) nexts1.emplace_back(tx, ty, tx, ty - 1);
-                if (tx < rows - 1 && try_update(tx, ty, tx + 1, ty)) nexts1.emplace_back(tx, ty, tx + 1, ty);
-                if (tx > 0 && try_update(tx, ty, tx - 1, ty)) nexts1.emplace_back(tx, ty, tx - 1, ty);
+                if (ty < columns - 1 && try_update(dp, heights, tx, ty, tx, ty + 1)) nexts1.emplace_back(tx, ty, tx, ty + 1);
+                if (ty > 0 && try_update(dp, heights, tx, ty, tx, ty - 1)) nexts1.emplace_back(tx, ty, tx, ty - 1);
+                if (tx < rows - 1 && try_update(dp, heights, tx, ty, tx + 1, ty)) nexts1.emplace_back(tx, ty, tx + 1, ty);
+                if (tx > 0 && try_update(dp, heights, tx, ty, tx - 1, ty)) nexts1.emplace_back(tx, ty, tx - 1, ty);
             }
             nexts.swap(nexts1);
         }
