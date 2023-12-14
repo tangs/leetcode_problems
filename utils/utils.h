@@ -15,6 +15,24 @@ class Utils {
   }
 public:
   template<class T>
+  static std::vector<T> v1(const std::string& txt) {
+    const std::regex word_regex(R"(\w+)");
+
+    std::vector<T> arr;
+    std::smatch smatch_word;
+    auto search_start_word(txt.cbegin());
+
+    while (regex_search(search_start_word, txt.cend(), smatch_word, word_regex)) {
+      auto word_txt = smatch_word[0].str();
+      search_start_word = smatch_word.suffix().first;
+
+      arr.push_back(to<T>(word_txt));
+    }
+
+    return arr;
+  }
+
+  template<class T>
   static std::vector<std::vector<T>> v2(const std::string& txt) {
     std::vector<std::vector<T>> ret;
 
@@ -24,19 +42,8 @@ public:
     std::smatch smatch;
     auto search_start(txt.cbegin());
     while (regex_search(search_start, txt.cend(), smatch, arr_regex)) {
-      std::vector<T> arr;
       auto arr_txt = smatch[0].str();
-      std::smatch smatch_word;
-      auto search_start_word(arr_txt.cbegin());
-
-      while (regex_search(search_start_word, arr_txt.cend(), smatch_word, word_regex)) {
-        auto word_txt = smatch_word[0].str();
-        search_start_word = smatch_word.suffix().first;
-
-        arr.push_back(to<T>(word_txt));
-      }
-
-      ret.push_back(arr);
+      ret.emplace_back(v1<T>(arr_txt));
       search_start = smatch.suffix().first;
     }
 
