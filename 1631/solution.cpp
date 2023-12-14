@@ -24,6 +24,7 @@ public:
 
         while (!nexts.empty()) {
             std::vector<std::tuple<int, int, int, int>> nexts1;
+
             for (auto& next: nexts) {
                 const auto [fx, fy, tx, ty] = next;
                 if (ty < columns - 1 && try_update(dp, heights, tx, ty, tx, ty + 1)) nexts1.emplace_back(tx, ty, tx, ty + 1);
