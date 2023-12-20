@@ -3,7 +3,10 @@
 
 #include "utils/utils.h"
 
-inline static bool try_update(std::vector<std::vector<int>>& dp, std::vector<std::vector<int>>& heights, int fx, int fy, int tx, int ty) {
+inline static bool try_update(
+    std::vector<std::vector<int>>& dp, 
+    std::vector<std::vector<int>>& heights, 
+    int fx, int fy, int tx, int ty) {
     auto val = std::max(dp[fx][fy], std::abs(heights[tx][ty] - heights[fx][fy]));
     if (val >= dp[tx][ty]) return false;
     dp[tx][ty] = val;
