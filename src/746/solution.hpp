@@ -2,7 +2,7 @@
 
 class Solution {
 public:
-  int minCostClimbingStairs(std::vector<int> cost) {
+  int minCostClimbingStairs(const std::vector<int>& cost) {
     const auto n = cost.size();
     int prev = 0, cur = 0;
 

@@ -13,10 +13,12 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-set(SRC_PATH ${ROOT_PATH}/src/${PROBLEM_NAME})
+set(SRC_ROOT_PATH ${ROOT_PATH}/src)
+set(SRC_PATH ${SRC_ROOT_PATH}/${PROBLEM_NAME})
 set(TESTS_PATH ${ROOT_PATH}/tests/${PROBLEM_NAME})
 
 include_directories(
+        ${SRC_ROOT_PATH}
         ${SRC_PATH}
         ${TESTS_PATH}
 )
