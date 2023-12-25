@@ -3,7 +3,7 @@
 #include "utils/utils.h"
 #include "solution.hpp"
 
-TEST(testing, BasicAssertions) {
+TEST(house_robber_exp_testing, BasicAssertions) {
   Solution solution;
 
   EXPECT_EQ(solution.rob({1,2,3,1}), 4);
