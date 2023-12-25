@@ -1,6 +1,7 @@
 class Solution {
 public:
-  int climbStairs(int n) {
+  [[nodiscard]]
+  int climbStairs(int n) const noexcept {
     if (n <= 2) return n;
     int p = 1;
     int c = 2;
