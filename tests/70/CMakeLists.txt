@@ -3,6 +3,8 @@ project(dp_solution_pipeline)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(PROBLEM_NAME 70)
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -11,8 +13,8 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-set(SRC_PATH ${ROOT_PATH}/src/70)
-set(TESTS_PATH ${ROOT_PATH}/tests/70)
+set(SRC_PATH ${ROOT_PATH}/src/${PROBLEM_NAME})
+set(TESTS_PATH ${ROOT_PATH}/tests/${PROBLEM_NAME})
 
 include_directories(
         ${SRC_PATH}
@@ -23,11 +25,11 @@ include_directories(
 enable_testing()
 
 add_executable(
-        test_70
+        test_${PROBLEM_NAME}
         ${TESTS_PATH}/test.cc
 )
-target_link_libraries(test_70 GTest::gtest_main)
+target_link_libraries(test_${PROBLEM_NAME} GTest::gtest_main)
 
 
 include(GoogleTest)
-gtest_discover_tests(test_70)
+gtest_discover_tests(test_${PROBLEM_NAME})
