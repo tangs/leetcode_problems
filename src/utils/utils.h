@@ -16,7 +16,7 @@ class Utils {
 public:
   template<class T>
   static std::vector<T> v1(const std::string& txt) {
-    const std::regex word_regex(R"(\w+)");
+    const std::regex word_regex(R"(-?\w+)");
 
     std::vector<T> arr;
     std::smatch smatch_word;
@@ -36,8 +36,7 @@ public:
   static std::vector<std::vector<T>> v2(const std::string& txt) {
     std::vector<std::vector<T>> ret;
 
-    const std::regex arr_regex(R"(\[((\w+,?)*)\])");
-    const std::regex word_regex(R"(\w+)");
+    const std::regex arr_regex(R"(\[((-?\w+,?)*)\])");
 
     std::smatch smatch;
     auto search_start(txt.cbegin());
