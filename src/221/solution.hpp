@@ -13,12 +13,16 @@ public:
       int prev = dp[0];
       for (int j = 1; j <= n; ++j) {
         int cur = dp[j];
-        dp[j] = matrix[i][j - 1] == '1' ? (std::min({prev, dp[j - 1], dp[j]}) + 1) : 0;
-        ans = std::max(dp[j] * dp[j], ans);
+        if (matrix[i][j - 1] == '1') {
+          dp[j] = std::min({prev, dp[j - 1], dp[j]}) + 1;
+          ans = std::max(dp[j], ans);
+        } else {
+          dp[j] = 0;
+        }
         prev = cur;
       }
     }
 
-    return ans;
+    return ans * ans;
   }
 };
