@@ -10,7 +10,8 @@ using namespace std;
 
 class Solution {
 public:
-    int pivotIndex(vector<int>&& nums) {
+    template<typename T>
+    int pivotIndex(T&& nums) {
         const auto len = nums.size();
         nums.push_back(0);
 
